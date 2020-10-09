@@ -1,4 +1,4 @@
 export default {
-    path: '/film',
-    component: () => import('@/views/cinema/cinema')
-}
+  path: "/cinema",
+  component: () => import("@/views/cinema/cinema"),
+};
