@@ -34,6 +34,8 @@ export default {};
   background: #fff;
   color: #7a7e83;
   width: 100%;
+  opacity: 1;
+  z-index: 99;
 
   ul {
     display: flex;

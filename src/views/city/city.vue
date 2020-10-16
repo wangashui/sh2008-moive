@@ -1,0 +1,79 @@
+<template>
+  <van-index-bar :index-list="indexList" highlight-color="red">
+    <div :style="{ height: height + 'px' }" class="scroll">
+      <div>
+        <template v-for="(item, index) in dataList">
+          <van-index-anchor
+            :index="item.index"
+            :key="index"
+            style="background:#eee"
+          />
+          <van-cell
+            @click="chooseCity(sub.name)"
+            v-for="(sub, key) in item.data"
+            :title="sub.name"
+            :key="key"
+          />
+        </template>
+      </div>
+    </div>
+  </van-index-bar>
+</template>
+
+<script>
+import { cityListData } from "@/api/api";
+import Vue from "vue";
+import { IndexBar, IndexAnchor, Cell } from "vant";
+import "vant/lib/index.css";
+import BScroll from "better-scroll";
+import { mapState } from "vuex";
+
+Vue.use(IndexBar);
+Vue.use(IndexAnchor);
+Vue.use(Cell);
+export default {
+  data() {
+    return {
+      dataList: [],
+      indexList: [],
+      height: 0,
+      bs: null,
+    };
+  },
+  //进入去掉底部道航
+  created() {
+    this.eventBus.$emit("footernav", false);
+  },
+  //出来的时候显示道航
+  beforDestroy() {
+    this.eventBus.$emit("footernav", true);
+  },
+  async mounted() {
+    let ret = await cityListData();
+    this.dataList = ret[0];
+    this.indexList = ret[1];
+  },
+  methods: {
+    chooseCity: function(cityName) {
+      //将数据写入vuex中
+      this.$store.commit("setCity", cityName);
+      this.$router.go(-1);
+    },
+  },
+  computed: {
+    ...mapState(["count", "city"]),
+  },
+  updated() {
+    this.bs = new BScroll(".scroll", {
+      pullUpLoad: true,
+      pullDownRefresh: true,
+      click: true,
+    });
+  },
+};
+</script>
+<style lang="scss">
+.scroll {
+  //   overflow: hidden;
+}
+</style>
