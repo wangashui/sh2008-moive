@@ -8,7 +8,11 @@
           v-for="(cinema, index) in cinema"
           :key="index"
         >
-          <a href="" class="cinema-item-wrap">
+          <a
+            href="JavaScript:;"
+            class="cinema-item-wrap"
+            @click="getCinemaId(cinema.cinemaId)"
+          >
             <div class="cinema-list-left">
               <span class="cinema-name">{{ cinema.name }}</span>
               <span class="cinema-address">{{ cinema.address }}</span>
@@ -17,7 +21,7 @@
               <div>
                 <span class="cinema-price">
                   <i>￥</i>
-                  <span class="interge" style="font-size: 15px;">{{
+                  <span class="interge" style="font-size: 15px">{{
                     cinema.lowPrice | Priceprocessing
                   }}</span>
                 </span>
@@ -51,7 +55,7 @@ export default {
     this.cinema = ret.data.data.cinemas;
   },
   filters: {
-    Priceprocessing: function(value) {
+    Priceprocessing: function (value) {
       let price = value / 100;
       return price;
     },
@@ -73,6 +77,11 @@ export default {
       this.bs.finishPullDown();
     });
   },
+  methods: {
+    getCinemaId: function (cinemaId) {
+      this.$router.push({ name: "cinemaDetail", params: { cinemaId } });
+    },
+  },
 };
 </script>
 <style lang="scss">
@@ -80,9 +89,10 @@ export default {
 //   overflow: hidden;
 // }
 .cinema-list-wrap {
+  position: fixed;
+  top: 90px;
   // height: 22338px !important;
   padding-bottom: 49px;
-  z-index: 100;
   // overflow: hidden;
   .cinema-list {
     list-style: none;

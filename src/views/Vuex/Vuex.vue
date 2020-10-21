@@ -38,17 +38,28 @@ export default {
     // handle1: function() {
     //   this.$store.commit("add", 13);
     // },
-    handle2: function() {
+    handle2: function () {
       this.add(13);
     },
-    handle3: function() {
+    handle3: function () {
       this.$store.dispatch("addAsync", 13);
     },
-    handle4: function() {
+    handle4: function () {
       this.addAsync(13);
     },
-    handle5: function() {
+    handle5: function () {
       console.log(this.$store.getters.getCount);
+    },
+    getCityName: function (state, positionName) {
+      state.positionCity = positionName;
+    },
+    getCityId: function (state, cityId) {
+      localStorage.setItem("cityId", cityId);
+      state.cityId = cityId;
+    },
+    clickCityId: function (state, cityId) {
+      localStorage.setItem("clickId", cityId);
+      state.clickCityId = cityId;
     },
   },
 };

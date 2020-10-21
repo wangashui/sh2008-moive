@@ -13,7 +13,12 @@
           <img :src="item.poster" />
         </div>
         <div class="middle">
-          <div>{{ item.name }}</div>
+          <div class="film-name">
+            <span class="name"
+              >{{ item.name }}
+              <span class="film-type">{{ item.item.name }}</span>
+            </span>
+          </div>
           <div v-if="type == 1">
             <span>观众评分</span>
             <span class="grade">{{ item.grade }}</span>
@@ -26,7 +31,7 @@
         </div>
         <div class="right">
           <span v-if="type == 1">购票</span>
-          <span v-if="type == 2">预够</span>
+          <span v-if="type == 2 && item.isPresale == true">预够</span>
         </div>
       </div>
     </div>
@@ -62,7 +67,7 @@ export default {
     }
   },
   filters: {
-    parseActors: function(value) {
+    parseActors: function (value) {
       let actors = "";
       if (value) {
         value.forEach((element) => {
@@ -73,7 +78,7 @@ export default {
       }
       return actors;
     },
-    parsePremiereAt: function(value) {
+    parsePremiereAt: function (value) {
       //时间戳的单位是秒,需要乘以1000转化为毫秒进行处理
       return moment(value * 1000).format("ddd MM月DD日");
     },
@@ -100,10 +105,10 @@ export default {
     });
   },
   methods: {
-    goDetail: function(filmId) {
+    goDetail: function (filmId) {
       this.$router.push({ name: "detail", params: { filmId } });
     },
-    getData: async function() {
+    getData: async function () {
       if (this.flag) {
         this.pageNum++;
         //获取数据
@@ -155,6 +160,34 @@ export default {
       flex-direction: column;
       justify-content: space-between;
       width: 55%;
+      .film-name {
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        width: 100%;
+        .name {
+          max-width: calc(100% - 25px);
+          color: #191a1b;
+          font-size: 16px;
+          height: 22px;
+          line-height: 22px;
+          margin-right: 5px;
+          overflow: hidden;
+          text-overflow: ellipsis;
+          white-space: nowrap;
+          display: inline-block;
+          .film-type {
+            font-size: 9px;
+            color: #fff;
+            background-color: #d2d6dc;
+            height: 14px;
+            line-height: 14px;
+            padding: 0 2px;
+            border-radius: 2px;
+            display: inline-block;
+          }
+        }
+      }
 
       div:nth-of-type(1) {
         color: #191a1b;

@@ -35,7 +35,4 @@ export default {
 };
 </script>
 <style lang="scss">
-.CinemaList {
-  margin-top: 90px;
-}
 </style>

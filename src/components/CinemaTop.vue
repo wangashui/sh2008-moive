@@ -3,10 +3,10 @@
     <div class="left">
       <span @click="gocity()">{{ city }}</span>
       <img
-        data-v-4070467a=""
         src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABIAAAAJCAMAAAAIAYw9AAAAOVBMVEVHcEwZGhsZGxsZGhskJCQaGhwbGxsZHR0ZGhsZGhsZGhsZGhsZHBwaGhsaGhwZGxsaGh0bGxsZGhsAwt9XAAAAEnRSTlMA5Z7pB2scPfrK6NJskn6fcnH7htMrAAAAVElEQVQI11XNOQKAIBAEwQEXl0NQ+/+PNfDucIIabaGbnqyHXQHKfC9zgaABVD8Xr8CQlgw5SVLKkBdJ8gmIZhGY/BUoha9qKwDEz/fJJP3y1i5GB2jVA/F2X5USAAAAAElFTkSuQmCC"
         width="6px"
         height="3px"
+        id="imgcity"
       />
     </div>
     <div class="title">
@@ -24,20 +24,78 @@
   </header>
 </template>
 <script>
+import Vue from "vue";
 import { mapState } from "vuex";
+import { mapMutations } from "vuex";
 export default {
-  methods: {
-    gocity: function() {
-      this.$router.push("/city");
-    },
+  created() {
+    this.getLocation();
+    let getcityName = localStorage.getItem("cityName");
+    this.$store.state.city = getcityName;
   },
   computed: {
     ...mapState(["city"]),
+  },
+  methods: {
+    gocity: function () {
+      this.$router.push("/city");
+    },
+    getLocation() {
+      let _this = this;
+      AMap.plugin("AMap.Geolocation", function () {
+        var geolocation = new AMap.Geolocation({
+          // 是否使用高精度定位，默认：true
+          enableHighAccuracy: true, // 设置定位超时时间，默认：无穷大
+          timeout: 5000,
+        });
+        geolocation.getCurrentPosition();
+        AMap.event.addListener(geolocation, "complete", onComplete);
+        AMap.event.addListener(geolocation, "error", onError); // data是具体的定位信息
+        // let cityName = ""
+        function onComplete(data) {
+          // console.log(data);
+          let cityId = data.addressComponent.adcode;
+          let cityName = data.addressComponent.province;
+          let wangxin = localStorage.getItem("clickName");
+          if (wangxin == undefined) {
+            let posName = localStorage.getItem("cityName");
+            this.city1 = posName;
+          }
+          if (wangxin == null) {
+            // this.getCityId(cityId);
+            let a = cityName.substr(0, 2);
+            localStorage.setItem("cityName", a);
+            // let b = this.getCityName(a);
+          }
+        }
+        function onError(data) {
+          // 失败 启用 ip定位
+          AMap.plugin("AMap.CitySearch", function () {
+            var citySearch = new AMap.CitySearch();
+            citySearch.getLocalCity(function (status, result) {
+              if (status === "complete" && result.info === "OK") {
+                // 查询成功，result即为当前所在城市信息
+                let a = result.city;
+                // let b = a.substr(0, 2);
+                // console.log("通过ip获取当前城市：", result);
+                let b = a.substr(0, 2);
+                localStorage.setItem("cityName", b);
+                // this.$router.go(-1);
+              }
+            });
+          });
+        }
+      });
+    },
   },
 };
 </script>
 
 <style lang="scss">
+#imgcity {
+  width: 6px;
+  height: 3px;
+}
 header {
   position: fixed;
   top: 0;

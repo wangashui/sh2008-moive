@@ -89,7 +89,7 @@ export default {
             if (this.$route.query.refer) {
               this.$router.push({ path: decodeURI(this.$route.query.refer) });
             } else {
-              this.$router.push({ path: "center" });
+              this.$router.push({ path: "/center" });
             }
             // alert("登陆成功");
           } else {

@@ -13,11 +13,20 @@ axios.interceptors.request.use(
     if (info == "cinema") {
       host = "mall.film-ticket.cinema.list";
     }
+    if (info == "detail") {
+      host = "mall.film-ticket.cinema.info";
+    }
     if (info == "info") {
       host = "mall.film-ticket.film.info";
     }
     if (info == "city") {
       host = "mall.film-ticket.city.list";
+    }
+    if (info == "cinemaFilm") {
+      host = "mall.film-ticket.film.cinema-show-film";
+    }
+    if (info == "FilmTicket") {
+      host = "mall.film-ticket.schedule.list"
     }
     if (config.headers.authorization) {
       config.headers = {

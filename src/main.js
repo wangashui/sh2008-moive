@@ -1,10 +1,22 @@
 import Vue from "vue";
 import App from "./App.vue";
 import router from "./router";
+import AMap from "vue-amap";
 import VueLazyload from "vue-lazyload";
 //以内element ui
 import ElementUI from "element-ui";
 import "element-ui/lib/theme-chalk/index.css";
+
+
+Vue.use(AMap);
+// 初始化vue-amap
+AMap.initAMapApiLoader({
+  // 高德key
+  key: '6bece30dae25be7dae1f7fa642b9dd78',
+  // 插件集合 （插件按需引入）
+  plugin: ['AMap.Geolocation'],
+  v: '1.4.4',
+});
 
 Vue.use(ElementUI);
 Vue.config.productionTip = false;
@@ -22,6 +34,8 @@ let _token = localStorage.getItem("_token");
 if (_token) {
   store.commit("updateToken", _token);
 }
+
+
 
 new Vue({
   router,

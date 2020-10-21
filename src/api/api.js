@@ -11,6 +11,9 @@ import {
   cityListUri,
   loginUrl,
   centerUrl,
+  cinemaDetailUrl,
+  cinemaFilmUrl,
+  ticketListUrl,
 } from "@/config/url";
 
 //请求正在热映列表数据
@@ -38,6 +41,27 @@ export const cinemaListData = () => {
   http.defaults.headers.authorization = "";
   http.defaults.headers.info = "cinema";
   return http.get(cinemaListUri);
+};
+//请求电影院详情
+export const cinemaDetailData = (cinemaId) => {
+  http.defaults.headers.authorization = "";
+  http.defaults.headers.info = "detail";
+  return http.get(cinemaDetailUrl + cinemaId);
+};
+//请求电影院----电影详情
+export const cinemaFilmData = (cinemaId) => {
+  http.defaults.headers.authorization = "";
+  http.defaults.headers.info = "cinemaFilm";
+  return http.get(cinemaFilmUrl + cinemaId);
+};
+//请求电影院----电影票数据
+export const filmTicketData = (filmIdTicket, cinemaId, filmId) => {
+  http.defaults.headers.authorization = "";
+  http.defaults.headers.info = "FilmTicket";
+  let filmIdTicketRe = '&' + 'date' + '=' + filmIdTicket
+  let cinemaIdRe = '&' + 'cinemaId' + '=' + cinemaId
+  let filmIdRe = '&' + 'filmId' + '=' + filmId
+  return http.get(ticketListUrl + filmIdTicketRe + cinemaIdRe + filmIdRe);
 };
 //请求城市数据
 export const cityListData = async () => {
@@ -79,7 +103,8 @@ export const userInfo = (_token) => {
 
   http.defaults.headers.authorization = _token;
   http.interceptors.response.use(function (response) {
-    response.data.user_info.gender = response.data.user_info.gender ? '女' : '男';
+    // response.data.user_info.gender = response.data.user_info.gender ? '女' : '男';
+    // console.log(response)
     return response
   }, function (error) {
     //错误处理

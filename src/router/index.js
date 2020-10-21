@@ -10,6 +10,8 @@ import detailRouter from './routes/detail'
 import cityRouter from "./routes/city"
 import vueRouter from "./routes/vuex"
 import loginRouter from "./routes/login"
+import setRouter from "./routes/set"
+import cinemaDetailRouter from "./routes/cinemadetail"
 const routes = [{
     path: '/',
     //访问根路由跳转到电影页面
@@ -22,6 +24,8 @@ const routes = [{
   cityRouter,
   vueRouter,
   loginRouter,
+  setRouter,
+  cinemaDetailRouter,
 ]
 
 const router = new VueRouter({

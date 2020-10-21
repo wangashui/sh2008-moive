@@ -32,6 +32,9 @@ export default new Vuex.Store({
         context.commit("add", step);
       }, 3000);
     },
+    getCityName: function (state, positionName) {
+      state.positionCity = positionName;
+    },
   },
   getters: {
     getCount: function (state) {

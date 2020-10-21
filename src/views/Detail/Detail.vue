@@ -1,68 +1,78 @@
 <template>
-  <div class="detail">
-    <div class="img">
-      <img v-lazy="film.poster" />
-      <div class="goBack" @click="goBack">
-        <img
-          src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADoAAAA6CAMAAADWZboaAAAAt1BMVEVHcEz///////////////////////////////////////////////////////////////////////////////////97e3saGxyIiYnW1tYdHh9UVVUpKiulpaXLy8s6OzyysrIiIyPx8fEeHyC/v7/5+fklJihCQ0Ntb28bHB1hYWKXl5c0NTZLS0xAQUI4ODk3ODjh4eHr6+s2Nzfq6uptbm5gYGIbHB39/f2VlZdLS0wzNDUZGhs8UYRWAAAAPHRSTlMAGHpLE3cKgEdgVnJfNBZ+cBx9A28js/6sjPvK7p+Q3pn1g/iUgfLYuvzCpeTR2eHiiIXihrvD/YCl0uTUXbEtAAABd0lEQVRIx91W13KDQAw0xnCHARuDe+/dKY7T9f/flTzghCLdMaMXj/eRnZ0T0qqUSveBim96gRWGVuCZfqW4zpCuSMGVRiFhwxEInIY+0qogUFXHHcm6IFGXEa20HaGEY1PKWlNo0KzhylZZaFFuoW8WUP5qkXdtMtrnx4dkzLn/jcgMXY7wlMpVNs+SUs4nMOylvsiME6h6rjawHmfqm/YG6aETzJY5X6V8SykHsJjmvyb9TOVoD/0R5qpElxHKLewOKGHo0tuGThdn/pPsony3A20iHPevMih92MGW9OO1Pj5Gjvqwp63sx1IT4aYLGCi6wIylXp5azuCkaiAvlgY5ZryGzUolDWKplSV6Q5jMlW1rxdIwS7zA8azu+JCWfl+KSRkBM9KEF+fro0BxGJagjPimNyJp/1et/RlNx2l1esC8f2oGDGOscYYpY4RzFgdjXSmW5Fm3JBmrmXMQcM4QzvHDObk4hx7nvGQdtaxTmnXA3zR+AH8JUdNL967cAAAAAElFTkSuQmCC"
-          alt=""
-        />
-      </div>
-    </div>
-    <div class="film-detail">
-      <div class="name">{{ film.name }}</div>
-      <div class="category">{{ film.category }}</div>
-      <div class="premiereAt">{{ film.premiereAt | parsePremiereAt }}上映</div>
-      <div class="nation">{{ film.nation }} | {{ film.runtime }} 分钟</div>
-      <div :class="tagactive ? 'synopsis' : 'synopsisb'">
-        {{ film.synopsis }}
-      </div>
-      <div class="toggle">
-        <img
-          @click="tagAcctive"
-          :class="tagactive ? '' : 'uper'"
-          src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAICAMAAADHqI+lAAAAOVBMVEVHcEy9xcW9wMW9wcW////Bwca9wcW9wMW9wMW+wMW+wcW9wcXMzMy+wMa+wce9wMe9wca9wMW9wMWKU/2FAAAAEnRSTlMAH+jGBDa6/vaatcIPdlNSdckJHB8JAAAASUlEQVQIHQXBhwGDMAADMCVksQr4/2MrObYCQNkOZ2oH6DWna2Q9wG9lXLQ984V3Zm/gntlb2zNvgN/KGFkPAL0mtQNA+b4C/AGl4gJfgEWzrAAAAABJRU5ErkJggg=="
-        />
-      </div>
-    </div>
-    <div class="actors">
-      <div class="actors-title">
-        <span>演职人员</span>
-      </div>
-      <div class="actors-list">
-        <Swiper :key="'actors_' + film.actors.length">
-          <div
-            class="swiper-slide"
-            v-for="(item, index) in film.actors"
-            :key="index"
-          >
-            <div class="actors-img">
-              <img :src="item.avatarAddress" />
-            </div>
-            <span class="actor-name">{{ item.name }}</span>
-            <span class="actor-role">{{ item.role }}</span>
+  <div class="scroll">
+    <div class="cinema-list-wrap">
+      <div class="detail">
+        <div class="img">
+          <img v-lazy="film.poster" />
+          <div class="goBack" @click="goBack">
+            <img
+              src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADoAAAA6CAMAAADWZboaAAAAt1BMVEVHcEz///////////////////////////////////////////////////////////////////////////////////97e3saGxyIiYnW1tYdHh9UVVUpKiulpaXLy8s6OzyysrIiIyPx8fEeHyC/v7/5+fklJihCQ0Ntb28bHB1hYWKXl5c0NTZLS0xAQUI4ODk3ODjh4eHr6+s2Nzfq6uptbm5gYGIbHB39/f2VlZdLS0wzNDUZGhs8UYRWAAAAPHRSTlMAGHpLE3cKgEdgVnJfNBZ+cBx9A28js/6sjPvK7p+Q3pn1g/iUgfLYuvzCpeTR2eHiiIXihrvD/YCl0uTUXbEtAAABd0lEQVRIx91W13KDQAw0xnCHARuDe+/dKY7T9f/flTzghCLdMaMXj/eRnZ0T0qqUSveBim96gRWGVuCZfqW4zpCuSMGVRiFhwxEInIY+0qogUFXHHcm6IFGXEa20HaGEY1PKWlNo0KzhylZZaFFuoW8WUP5qkXdtMtrnx4dkzLn/jcgMXY7wlMpVNs+SUs4nMOylvsiME6h6rjawHmfqm/YG6aETzJY5X6V8SykHsJjmvyb9TOVoD/0R5qpElxHKLewOKGHo0tuGThdn/pPsony3A20iHPevMih92MGW9OO1Pj5Gjvqwp63sx1IT4aYLGCi6wIylXp5azuCkaiAvlgY5ZryGzUolDWKplSV6Q5jMlW1rxdIwS7zA8azu+JCWfl+KSRkBM9KEF+fro0BxGJagjPimNyJp/1et/RlNx2l1esC8f2oGDGOscYYpY4RzFgdjXSmW5Fm3JBmrmXMQcM4QzvHDObk4hx7nvGQdtaxTmnXA3zR+AH8JUdNL967cAAAAAElFTkSuQmCC"
+              alt=""
+            />
           </div>
-        </Swiper>
-      </div>
-    </div>
-    <div class="photos">
-      <div class="photo-tittle">
-        <span class="photo-tit">剧照</span>
-        <span class="photo-all">全部({{ film.photos.length }})></span>
-      </div>
-      <div class="photo-list">
-        <Swiper :key="'photos_' + film.photos.length">
-          <div
-            class="swiper-slide"
-            v-for="(item, index) in film.photos"
-            :key="index"
-          >
-            <div class="photo-img">
-              <img :src="item" alt="" />
-            </div>
+        </div>
+        <div class="film-detail">
+          <div class="name">
+            {{ film.name }}
+            <span class="film-type">{{ film.filmType.name }}</span>
           </div>
-        </Swiper>
+          <div class="category">{{ film.category }}</div>
+          <div class="premiereAt">
+            {{ film.premiereAt | parsePremiereAt }}上映
+          </div>
+          <div class="nation">{{ film.nation }} | {{ film.runtime }} 分钟</div>
+          <div :class="tagactive ? 'synopsis' : 'synopsisb'">
+            {{ film.synopsis }}
+          </div>
+          <div class="toggle">
+            <img
+              @click="tagAcctive"
+              :class="tagactive ? '' : 'uper'"
+              src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAICAMAAADHqI+lAAAAOVBMVEVHcEy9xcW9wMW9wcW////Bwca9wcW9wMW9wMW+wMW+wcW9wcXMzMy+wMa+wce9wMe9wca9wMW9wMWKU/2FAAAAEnRSTlMAH+jGBDa6/vaatcIPdlNSdckJHB8JAAAASUlEQVQIHQXBhwGDMAADMCVksQr4/2MrObYCQNkOZ2oH6DWna2Q9wG9lXLQ984V3Zm/gntlb2zNvgN/KGFkPAL0mtQNA+b4C/AGl4gJfgEWzrAAAAABJRU5ErkJggg=="
+            />
+          </div>
+        </div>
+        <div class="actors">
+          <div class="actors-title">
+            <span>演职人员</span>
+          </div>
+          <div class="actors-list">
+            <Swiper :key="'actors_' + film.actors.length">
+              <div
+                class="swiper-slide"
+                v-for="(item, index) in film.actors"
+                :key="index"
+              >
+                <div class="actors-img">
+                  <img :src="item.avatarAddress" />
+                </div>
+                <span class="actor-name">{{ item.name }}</span>
+                <span class="actor-role">{{ item.role }}</span>
+              </div>
+            </Swiper>
+          </div>
+        </div>
+        <div class="photos">
+          <div class="photo-tittle">
+            <span class="photo-tit">剧照</span>
+            <span class="photo-all">全部({{ film.photos.length }})></span>
+          </div>
+          <div class="photo-list">
+            <Swiper :key="'photos_' + film.photos.length">
+              <div
+                class="swiper-slide"
+                v-for="(item, index) in film.photos"
+                :key="index"
+              >
+                <div class="photo-img">
+                  <img :src="item" alt="" />
+                </div>
+              </div>
+            </Swiper>
+          </div>
+        </div>
       </div>
+      <div class="gobuy">立即选购</div>
     </div>
   </div>
 </template>
@@ -79,7 +89,6 @@ export default {
   },
   async mounted() {
     let ret = await moiveDetailData(this.$route.params.filmId);
-    console.log(ret.data.data.film);
     this.film = ret.data.data.film;
   },
   filters: {
@@ -88,6 +97,7 @@ export default {
       return moment(value * 1000).format("YYYY-MM-DD");
     },
   },
+
   methods: {
     tagAcctive: function() {
       if (this.tagactive == true) {
@@ -115,7 +125,24 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+.scroll {
+  overflow-x: hidden;
+}
+.gobuy {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  height: 49px;
+  width: 100%;
+  text-align: center;
+  background-color: #ff5f16;
+  color: #fff;
+  font-size: 16px;
+  line-height: 49px;
+  z-index: 20;
+}
 .detail {
+  padding-bottom: 49px;
   .img {
     width: 100%;
     height: 210px;
@@ -146,6 +173,16 @@ export default {
       height: 24px;
       line-height: 24px;
       margin-right: 7px;
+      .film-type {
+        font-size: 9px;
+        color: #fff;
+        background-color: #d2d6dc;
+        height: 14px;
+        line-height: 14px;
+        padding: 0 2px;
+        border-radius: 2px;
+        display: inline-block;
+      }
     }
     .category {
       font-size: 13px;
